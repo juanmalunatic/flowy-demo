@@ -15,10 +15,12 @@ body, html {
     position: relative; 
 }
 
-#blocklist {
+#sidebar-left {
     width: var(--sidebar-width);
     padding-left: 20px;
     background: #f0f0f0;
+    height: 100%;
+    overflow: auto;
 }
 
 #canvas-holder {
@@ -45,11 +47,6 @@ body, html {
 }
 
 /* Sidebar */
-
-#blocklist {
-    height: 100%;
-    overflow: auto;
-}
 
 .blockelem:first-child {
     margin-top: 20px
@@ -214,4 +211,31 @@ body, html {
     border-bottom: 1px solid #D3DCEA;
     line-height: 20px;
     text-indent: 0px;
+}
+
+ #toolbar {
+    --height: 24px;
+ }
+
+.toolbar-item {
+    display: inline-block;
+    text-decoration: none;
+    height: var(--height);
+    line-height:var(--height);
+    overflow: hidden;
+    margin-left:15px;
+}
+
+.toolbar-text,
+.toolbar-item .material-icons {
+    font-size: 18px;
+    line-height: var(--height);
+    height: var(--height);
+    padding: 0;
+    margin: 0;
+}
+
+.toolbar-text{
+    top: -3px;
+    position: relative;
 }

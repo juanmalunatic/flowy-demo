@@ -4,13 +4,44 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/alyssaxuu/flowy/flowy.min.css"
     />
+
+    <link rel="stylesheet" href="assets/material-icons-0.3.1/iconfont/material-icons.css" />
+
     <link rel="stylesheet" href="demo.css" />
   </head>
   <body>
     <div id="scenario">
-      <div id="blocklist"></div>
-      <div id="toolbar">
-        <a href="#" id="removeblock">Delete blocks</a>
+      <div id="sidebar-left">
+
+        <div id="blocklist">
+          <!-- Blocks go here -->
+        </div>
+
+        <div id="toolbar">
+          
+          <a href="#" id="removeblock" class="toolbar-item">
+            <span class="material-icons">delete</span>
+            <span class="toolbar-text">Clear</span>
+          </a>
+
+          <a href="#" id="saveblocks" class="toolbar-item">
+            <span class="material-icons">save</span>
+            <span class="toolbar-text">Save</span>
+          </a>
+
+          <a href="#" id="loadblocks-obj" class="toolbar-item">
+            <span class="material-icons">refresh</span>
+            <span class="toolbar-text">Rl obj</span>
+          </a>
+
+          <a href="#" id="loadblocks-str" class="toolbar-item">
+            <span class="material-icons">restore</span>
+            <span class="toolbar-text">Rl str</span>
+          </a>
+
+
+        </div>
+        
       </div>
       <div id="canvas-holder">
         <div id="canvas"></div>
@@ -28,6 +59,8 @@
     // Unified object to store state
     let fState = {
       blockDragging: null,
+      saveSlot: 'initial state',
+      saveSlotStr: 'initial state (string)',
     };
 
     // This is where everything gets executed
@@ -50,12 +83,14 @@
 
       // Event listeners
       bindUiEvents();
+
+      // Custom events, from Juancito
+      bindJuanEvents();
+
+
     };
     // Binding this scope to avoid using window!
-    document.addEventListener(
-      "DOMContentLoaded",
-      mainRoutine.bind(this, fState)
-    );
+    document.addEventListener("DOMContentLoaded", mainRoutine.bind(this, fState));
 
     // -------------------------------------------------------------------------
     // [FLOWY (BLOCK) EVENTS]
@@ -171,6 +206,32 @@
         flowy.deleteBlocks();
       });
     };
+
+    const bindJuanEvents = function() {
+
+      const saveBtn = document.getElementById("saveblocks");
+
+      saveBtn.addEventListener("click", () => {
+        let saveObj = flowy.output();
+        fState["saveSlot"]    = saveObj;
+        fState["saveSlotStr"] = JSON.stringify(saveObj);
+        console.log("Saved to fState (saveSlot/saveSlotStr)", fState);
+      })
+
+    
+      const loadObjBtn = document.getElementById("loadblocks-obj");
+      loadObjBtn.addEventListener("click", () => {
+        flowy.import(fState["saveSlot"]);
+      })
+
+      const loadStrBtn = document.getElementById("loadblocks-str");
+      loadStrBtn.addEventListener("click", () => {
+         //is the name problematic or its behavior?
+        let objectify = JSON.parse(fState["saveSlotStr"]);
+        flowy.import(objectify);
+      })
+
+    }
 
     // Event listener functions
     var aclick = false;
